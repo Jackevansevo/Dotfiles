@@ -1,0 +1,14 @@
+[user]
+	name = "Jack Evans"
+	email = [jack@evans.gb.net]
+
+[merge]
+	tool = vimdiff
+
+[alias]
+        co = checkout
+        br = branch
+        ci = commit
+        st = status
+[core]
+	excludesfile = /home/jack/.gitignore
