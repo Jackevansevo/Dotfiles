@@ -2,7 +2,6 @@ bluz71/vim-moonfly-colors
 cocopon/iceberg.vim
 ggandor/leap.nvim
 jiangmiao/auto-pairs
-justinmk/vim-dirvish
 lewis6991/gitsigns.nvim
 lukas-reineke/indent-blankline.nvim
 mhinz/vim-sayonara

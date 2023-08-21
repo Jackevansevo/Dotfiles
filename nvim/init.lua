@@ -138,3 +138,5 @@ require('gitsigns').setup{
 }
 
 vim.cmd([[ au TextYankPost * silent! lua vim.highlight.on_yank() ]])
+
+vim.cmd([[ nnoremap <silent>- :Ex<CR> ]])
