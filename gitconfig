@@ -1,0 +1,18 @@
+[user]
+	name = "Jack Evans"
+	email = jack@evans.gb.net
+
+[merge]
+	tool = vimdiff
+
+[alias]
+        co = checkout
+        br = branch
+        ci = commit
+        st = status
+[core]
+	excludesfile = /Users/jack/.gitignore
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
