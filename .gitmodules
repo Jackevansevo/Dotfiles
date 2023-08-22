@@ -66,3 +66,6 @@
 [submodule "nvim/pack/catppuccin/start/nvim"]
 	path = nvim/pack/catppuccin/start/nvim
 	url = https://github.com/catppuccin/nvim.git
+[submodule "nvim/pack/HiPhish/start/rainbow-delimiters.nvim"]
+	path = nvim/pack/HiPhish/start/rainbow-delimiters.nvim
+	url = https://github.com/HiPhish/rainbow-delimiters.nvim.git

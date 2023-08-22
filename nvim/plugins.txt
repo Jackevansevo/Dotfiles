@@ -1,3 +1,4 @@
+HiPhish/rainbow-delimiters.nvim
 cocopon/iceberg.vim
 ggandor/leap.nvim
 jiangmiao/auto-pairs

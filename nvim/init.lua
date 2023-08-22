@@ -3,7 +3,7 @@ vim.opt.exrc = true
 vim.opt.termguicolors = true
 vim.opt.background = "light"
 vim.opt.wrap = false
-vim.cmd("colorscheme iceberg")
+vim.cmd("colorscheme macvim")
 vim.opt.cursorline = true
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
@@ -82,10 +82,6 @@ require'nvim-treesitter.configs'.setup {
   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
 
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true,
-  },
   incremental_selection = {
     enable = true,
     keymaps = {
