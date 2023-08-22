@@ -63,3 +63,6 @@
 [submodule "nvim/pack/tpope/start/vim-fireplace"]
 	path = nvim/pack/tpope/start/vim-fireplace
 	url = https://github.com/tpope/vim-fireplace.git
+[submodule "nvim/pack/tpope/start/vim-vinegar"]
+	path = nvim/pack/tpope/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar.git

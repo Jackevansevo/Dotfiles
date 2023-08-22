@@ -25,13 +25,6 @@ vim.cmd([[
 
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
--- Helix inspired mappings
-vim.keymap.set("n", "gn", ":bn<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "gp", ":bp<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "ge", "G", { noremap = true, silent = true })
-vim.keymap.set("n", "gl", "$", { noremap = true, silent = true })
-vim.keymap.set("n", "gh", "^", { noremap = true, silent = true })
-
 vim.keymap.set("n", "L", "$", { noremap = true, silent = true })
 vim.keymap.set("n", "H", "^", { noremap = true, silent = true })
 vim.keymap.set("v", "L", "g_", { noremap = true, silent = true })
@@ -138,5 +131,3 @@ require('gitsigns').setup{
 }
 
 vim.cmd([[ au TextYankPost * silent! lua vim.highlight.on_yank() ]])
-
-vim.cmd([[ nnoremap <silent>- :Ex<CR> ]])
