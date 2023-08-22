@@ -37,7 +37,6 @@ hi PmenuSbar    guibg=Grey
 hi PmenuSel     guifg=White guibg=SkyBlue4
 hi PmenuThumb   gui=reverse
 hi Question     gui=bold guifg=Chartreuse4
-hi SignColumn   guibg=Grey guifg=DarkBlue
 hi SpecialKey   guifg=Blue
 hi SpellBad     guisp=Firebrick2 gui=undercurl
 hi SpellCap     guisp=Blue gui=undercurl
@@ -71,6 +70,13 @@ hi Underlined   gui=underline guifg=SteelBlue1
 "
 " Groups that differ between 'light' and 'dark' background.
 "
+
+hi SignColumn guifg=fg guibg=bg
+
+hi GitSignsAdd guifg=MediumSeaGreen guibg=bg
+hi GitSignsChange guifg=DarkOrange guibg=bg
+hi GitSignsDelete guifg=Red3 guibg=bg
+hi IndentBlankLineChar guifg=Gray90
 
 if &background == "dark"
   hi Boolean      gui=NONE guifg=DeepPink4 guibg=NONE
@@ -116,7 +122,6 @@ else
   hi Type         gui=bold guifg=Green4 guibg=NONE
   hi WildMenu     guibg=SkyBlue guifg=Black
   hi lCursor      guibg=fg guifg=bg
-  hi IndentBlankLineChar guifg=Gray80
 endif
 
 

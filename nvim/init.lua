@@ -8,7 +8,6 @@ vim.opt.cursorline = true
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 
-vim.opt.scl = "no"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.laststatus = 3
 vim.opt.winbar="%f"
