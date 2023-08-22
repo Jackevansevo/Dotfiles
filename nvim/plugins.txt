@@ -1,4 +1,3 @@
-bluz71/vim-moonfly-colors
 cocopon/iceberg.vim
 ggandor/leap.nvim
 jiangmiao/auto-pairs

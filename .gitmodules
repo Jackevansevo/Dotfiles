@@ -66,3 +66,6 @@
 [submodule "nvim/pack/tpope/start/vim-vinegar"]
 	path = nvim/pack/tpope/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar.git
+[submodule "nvim/pack/catppuccin/start/nvim"]
+	path = nvim/pack/catppuccin/start/nvim
+	url = https://github.com/catppuccin/nvim.git

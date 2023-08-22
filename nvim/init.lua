@@ -94,11 +94,6 @@ require'nvim-treesitter.configs'.setup {
       node_decremental = "<A-i>",
     },
   },
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-    max_file_lines = nil,
-  }
 }
 
 require("indent_blankline").setup()
