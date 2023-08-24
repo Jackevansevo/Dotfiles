@@ -12,6 +12,12 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.laststatus = 3
 vim.opt.winbar="%f"
 
+vim.opt.ignorecase = true
+vim.opt.infercase = true
+vim.opt.smartcase = true
+
+vim.opt.smartindent = true
+
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
