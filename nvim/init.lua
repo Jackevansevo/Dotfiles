@@ -1,3 +1,44 @@
+vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  "HiPhish/rainbow-delimiters.nvim",
+  "cocopon/iceberg.vim",
+  "ggandor/leap.nvim",
+  "jiangmiao/auto-pairs",
+  "lewis6991/gitsigns.nvim",
+  "lukas-reineke/indent-blankline.nvim",
+  "mhinz/vim-sayonara",
+  "neovim/nvim-lspconfig",
+  "nvim-treesitter/nvim-treesitter",
+  "radenling/vim-dispatch-neovim",
+  "rhysd/clever-f.vim",
+  "romainl/vim-qf",
+  "tartansandal/vim-compiler-pytest",
+  "tpope/vim-commentary",
+  "tpope/vim-dispatch",
+  "tpope/vim-fireplace",
+  "tpope/vim-fugitive",
+  "tpope/vim-repeat",
+  "tpope/vim-rhubarb",
+  "tpope/vim-surround",
+  "tpope/vim-unimpaired",
+  "tpope/vim-vinegar",
+})
+
+
 vim.opt.exrc = true
 
 vim.opt.termguicolors = true
@@ -27,8 +68,6 @@ vim.cmd([[
     let g:loaded_perl_provider = 0
     let g:python3_host_prog = '$PYENV_ROOT/versions/py3nvim/bin/python'
 ]])
-
-vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
 vim.keymap.set("n", "L", "$", { noremap = true, silent = true })
 vim.keymap.set("n", "H", "^", { noremap = true, silent = true })
@@ -78,7 +117,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-require("indent_blankline").setup()
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "python",
@@ -97,7 +135,6 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-require("indent_blankline").setup()
 require('leap').add_default_mappings()
 
 require('gitsigns').setup{
