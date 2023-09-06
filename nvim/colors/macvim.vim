@@ -125,6 +125,8 @@ else
 endif
 
 
+hi WinSeparator guibg=None
+
 "
 " Change the selection color on focus change (but only if the "macvim"
 " colorscheme is active).

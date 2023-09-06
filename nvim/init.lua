@@ -13,54 +13,103 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+gitsigns_config = {
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    map('n', '[c', function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    -- Actions
+    map('n', '<leader>hs', gs.stage_hunk)
+    map('n', '<leader>hr', gs.reset_hunk)
+    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
+
 require("lazy").setup({
   "HiPhish/rainbow-delimiters.nvim",
-  "cocopon/iceberg.vim",
-  "ggandor/leap.nvim",
-  "jiangmiao/auto-pairs",
-  "lewis6991/gitsigns.nvim",
-  "lukas-reineke/indent-blankline.nvim",
-  "mhinz/vim-sayonara",
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = gitsigns_config,
+  },
   "neovim/nvim-lspconfig",
   "nvim-treesitter/nvim-treesitter",
   "radenling/vim-dispatch-neovim",
-  "rhysd/clever-f.vim",
   "romainl/vim-qf",
   "tartansandal/vim-compiler-pytest",
-  "tpope/vim-commentary",
   "tpope/vim-dispatch",
   "tpope/vim-fireplace",
   "tpope/vim-fugitive",
-  "tpope/vim-repeat",
-  "tpope/vim-rhubarb",
-  "tpope/vim-surround",
-  "tpope/vim-unimpaired",
-  "tpope/vim-vinegar",
+  "echasnovski/mini.nvim"
 })
 
+require('mini.ai').setup({})
+require('mini.align').setup({})
+require('mini.basics').setup({
+  options = {
+    basic = true,
+    extra_ui = true,
+    win_borders = 'single',
+  }
+})
+require('mini.bracketed').setup({})
+require('mini.bufremove').setup({})
+require('mini.comment').setup({})
+require('mini.completion').setup({})
+require('mini.cursorword').setup({})
+require('mini.files').setup({})
+require('mini.jump').setup({})
+require('mini.jump2d').setup({})
+require('mini.move').setup({})
+require('mini.operators').setup({})
+require('mini.pairs').setup({})
+require('mini.sessions').setup({})
+require('mini.splitjoin').setup({})
+require('mini.starter').setup({})
+require('mini.statusline').setup({ set_vim_settings = false })
+require('mini.surround').setup({})
+require('mini.tabline').setup({})
+require('mini.test').setup({})
+require('mini.trailspace').setup({})
 
 vim.opt.exrc = true
+vim.opt.number = false
+vim.opt.laststatus = 3
 
-vim.opt.termguicolors = true
 vim.opt.background = "light"
-vim.opt.wrap = false
 vim.cmd("colorscheme macvim")
-vim.opt.cursorline = true
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
-
-vim.opt.clipboard = "unnamedplus"
-vim.opt.laststatus = 3
-vim.opt.winbar="%f"
-
-vim.opt.ignorecase = true
-vim.opt.infercase = true
-vim.opt.smartcase = true
-
-vim.opt.smartindent = true
-
-vim.opt.splitbelow = true
-vim.opt.splitright = true
 
 vim.cmd([[
     let g:loaded_ruby_provider = 0
@@ -77,10 +126,11 @@ vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 vim.cmd([[ command! -nargs=+ Grep execute 'silent grep! <args>' | copen ]])
 
-vim.cmd([[ cnoreabbrev <expr> bc 'Sayonara!' ]])
+vim.cmd([[ cnoreabbrev <expr> bc 'lua MiniBufremove.delete()' ]])
 
 vim.keymap.set('n', '<leader>f', ':find ', {})
 vim.keymap.set('n', '<leader>/', ':Grep ', {})
+vim.keymap.set('n', '-', ':lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>', {})
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -133,34 +183,6 @@ require'nvim-treesitter.configs'.setup {
       node_decremental = "<A-i>",
     },
   },
-}
-
-require('leap').add_default_mappings()
-
-require('gitsigns').setup{
-  on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
-
-    local function map(mode, l, r, opts)
-      opts = opts or {}
-      opts.buffer = bufnr
-      vim.keymap.set(mode, l, r, opts)
-    end
-
-    -- Navigation
-    map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-    map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-  end
 }
 
 vim.cmd([[ au TextYankPost * silent! lua vim.highlight.on_yank() ]])
