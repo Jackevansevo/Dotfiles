@@ -67,10 +67,21 @@ require("lazy").setup({
   "radenling/vim-dispatch-neovim",
   "romainl/vim-qf",
   "tartansandal/vim-compiler-pytest",
+  "tpope/vim-abolish",
   "tpope/vim-dispatch",
   "tpope/vim-fireplace",
   "tpope/vim-fugitive",
-  "echasnovski/mini.nvim"
+  "tpope/vim-rhubarb",
+  "echasnovski/mini.nvim",
+  {
+    "catppuccin/nvim",
+     lazy = false,
+     priority = 1000 ,
+     config = function()
+       -- load the colorscheme here
+       vim.cmd([[colorscheme catppuccin]])
+    end,
+  },
 })
 
 require('mini.ai').setup({})
@@ -105,9 +116,6 @@ require('mini.trailspace').setup({})
 vim.opt.exrc = true
 vim.opt.number = false
 vim.opt.laststatus = 3
-
-vim.opt.background = "light"
-vim.cmd("colorscheme macvim")
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 
@@ -169,6 +177,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 
 require'nvim-treesitter.configs'.setup {
+  enable = true,
+  additional_vim_regex_highlighting = true,
+
+
   ensure_installed = "python",
 
   -- Automatically install missing parsers when entering buffer
