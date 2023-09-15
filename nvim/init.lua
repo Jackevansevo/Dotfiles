@@ -74,14 +74,25 @@ require("lazy").setup({
   "tpope/vim-rhubarb",
   "echasnovski/mini.nvim",
   {
-    "catppuccin/nvim",
+	  "sainnhe/everforest",
      lazy = false,
      priority = 1000 ,
      config = function()
        -- load the colorscheme here
-       vim.cmd([[colorscheme catppuccin]])
+       vim.opt.background = 'light'
+       vim.cmd([[colorscheme everforest]])
     end,
-  },
+  }
+  -- {
+  --   "catppuccin/nvim",
+  --    lazy = false,
+  --    priority = 1000 ,
+  --    config = function()
+  --      -- load the colorscheme here
+  --      vim.opt.background = 'light'
+  --      vim.cmd([[colorscheme catppuccin]])
+  --   end,
+  -- },
 })
 
 require('mini.ai').setup({})
