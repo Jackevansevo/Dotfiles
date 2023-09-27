@@ -111,15 +111,14 @@ require('mini.splitjoin').setup({})
 require('mini.starter').setup({})
 require('mini.surround').setup({})
 require('mini.tabline').setup({})
-require('mini.test').setup({})
 require('mini.trailspace').setup({})
+require('mini.statusline').setup({ set_vim_settings = false })
 
 vim.opt.exrc = true
 vim.opt.number = false
 vim.opt.laststatus = 3
-vim.cmd[[ colorscheme solarized ]]
-
-vim.cmd[[ set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P ]]
+vim.cmd[[ colorscheme base16-mocha ]]
+vim.cmd[[ hi WinSeparator guibg=NONE ]]
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 
@@ -185,8 +184,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require'nvim-treesitter.configs'.setup {
   enable = true,
-  additional_vim_regex_highlighting = true,
 
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = true,
+  },
 
   ensure_installed = "python",
 
