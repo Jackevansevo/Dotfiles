@@ -72,7 +72,12 @@ require("lazy").setup({
   "tpope/vim-fireplace",
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
-  "echasnovski/mini.nvim",
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = { indent = { char = {"│"} }, highlight = {} },
+  },
+  { 'echasnovski/mini.nvim', version = '*' },
   {
     'nvim-telescope/telescope.nvim', tag = '0.1.3',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -114,10 +119,21 @@ require('mini.tabline').setup({})
 require('mini.trailspace').setup({})
 require('mini.statusline').setup({ set_vim_settings = false })
 
+local hooks = require "ibl.hooks"
+hooks.register(
+  hooks.type.WHITESPACE,
+  hooks.builtin.hide_first_space_indent_level
+)
+
+hooks.register(
+  hooks.type.WHITESPACE,
+  hooks.builtin.hide_first_tab_indent_level
+)
+
 vim.opt.exrc = true
 vim.opt.number = false
 vim.opt.laststatus = 3
-vim.cmd[[ colorscheme base16-mocha ]]
+vim.cmd[[ colorscheme base16-one-light ]]
 vim.cmd[[ hi WinSeparator guibg=NONE ]]
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
