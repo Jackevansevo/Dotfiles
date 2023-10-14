@@ -75,20 +75,9 @@ require("lazy").setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = { indent = { char = {"│"} }, highlight = {} },
+    opts = { scope = { enabled = false }, indent = { char = {"│"} } },
   },
-  { 'echasnovski/mini.nvim', version = '*' },
-  {
-    'nvim-telescope/telescope.nvim', tag = '0.1.3',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-      pickers = {
-        find_files = { theme = "ivy", previewer = false, layout_config = { height = 15 } },
-        live_grep = { theme = "ivy", layout_config = { height = 15 } },
-        buffers = { theme = "ivy", layout_config = { height = 15 } },
-      },
-    },
-  },
+  { 'echasnovski/mini.nvim', version = false },
 })
 
 require('mini.ai').setup({})
@@ -111,13 +100,14 @@ require('mini.jump2d').setup({})
 require('mini.move').setup({})
 require('mini.operators').setup({})
 require('mini.pairs').setup({})
+require('mini.pick').setup({})
 require('mini.sessions').setup({})
 require('mini.splitjoin').setup({})
 require('mini.starter').setup({})
+require('mini.statusline').setup({ set_vim_settings = false })
 require('mini.surround').setup({})
 require('mini.tabline').setup({})
 require('mini.trailspace').setup({})
-require('mini.statusline').setup({ set_vim_settings = false })
 
 local hooks = require "ibl.hooks"
 hooks.register(
@@ -157,10 +147,9 @@ vim.cmd([[ cnoreabbrev <expr> bc 'lua MiniBufremove.delete()' ]])
 
 vim.keymap.set('n', '-', ':lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>', {})
 
-local builtin = require('telescope.builtin')
-vim.keymap.set("n", "<leader>f",  builtin.find_files, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>/",  builtin.live_grep, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>b",  builtin.buffers, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>f",  ":Pick files<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>/",  ":Pick grep<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>b",  ":Pick buffers<CR>", { noremap = true, silent = true })
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
