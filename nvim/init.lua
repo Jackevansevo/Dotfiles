@@ -57,7 +57,6 @@ gitsigns_config = {
 }
 
 require("lazy").setup({
-  "HiPhish/rainbow-delimiters.nvim",
   {
     "lewis6991/gitsigns.nvim",
     opts = gitsigns_config,
@@ -65,6 +64,7 @@ require("lazy").setup({
   "neovim/nvim-lspconfig",
   "nvim-treesitter/nvim-treesitter",
   "radenling/vim-dispatch-neovim",
+  "github/copilot.vim",
   "romainl/vim-qf",
   "tartansandal/vim-compiler-pytest",
   "tpope/vim-abolish",
@@ -72,11 +72,6 @@ require("lazy").setup({
   "tpope/vim-fireplace",
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    opts = { scope = { enabled = false }, indent = { char = {"│"} } },
-  },
   { 'echasnovski/mini.nvim', version = false },
 })
 
@@ -108,17 +103,6 @@ require('mini.statusline').setup({ set_vim_settings = false })
 require('mini.surround').setup({})
 require('mini.tabline').setup({})
 require('mini.trailspace').setup({})
-
-local hooks = require "ibl.hooks"
-hooks.register(
-  hooks.type.WHITESPACE,
-  hooks.builtin.hide_first_space_indent_level
-)
-
-hooks.register(
-  hooks.type.WHITESPACE,
-  hooks.builtin.hide_first_tab_indent_level
-)
 
 vim.opt.exrc = true
 vim.opt.number = false
