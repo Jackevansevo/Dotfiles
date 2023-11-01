@@ -108,7 +108,6 @@ vim.opt.exrc = true
 vim.opt.number = false
 vim.opt.laststatus = 3
 vim.cmd[[ colorscheme base16-one-light ]]
-vim.cmd[[ hi WinSeparator guibg=NONE ]]
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 
