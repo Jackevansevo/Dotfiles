@@ -65,13 +65,13 @@ require("lazy").setup({
   "nvim-treesitter/nvim-treesitter",
   "radenling/vim-dispatch-neovim",
   "github/copilot.vim",
-  "romainl/vim-qf",
   "tartansandal/vim-compiler-pytest",
   "tpope/vim-abolish",
   "tpope/vim-dispatch",
   "tpope/vim-fireplace",
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
+  "bakpakin/janet.vim",
   { 'echasnovski/mini.nvim', version = false },
 })
 
@@ -107,7 +107,7 @@ require('mini.trailspace').setup({})
 vim.opt.exrc = true
 vim.opt.number = false
 vim.opt.laststatus = 3
-vim.cmd[[ colorscheme base16-one-light ]]
+vim.cmd[[ colorscheme base16-tomorrow ]]
 
 vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 
