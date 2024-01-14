@@ -20,5 +20,5 @@ for author, plugins in plugins_by_author.items():
         print(plugin)
         _, plugin_name = plugin.split("/")
         if not (author_plugin_path / plugin_name).exists():
-            run(['git', 'clone', f'https://github.com/{plugin}'], cwd=author_plugin_path)
+            run(['git', 'submodule', 'add', f'https://github.com/{plugin}'], cwd=author_plugin_path)
         run(f'nvim -u NONE -c "helptags {plugin_name}/doc" -c q', cwd=author_plugin_path, shell=True)

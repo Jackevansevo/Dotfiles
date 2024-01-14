@@ -14,7 +14,7 @@ vim.opt.splitbelow = true
 vim.opt.wrap = false
 
 vim.opt.background = 'light'
-vim.cmd.colorscheme "wildcharm"
+vim.cmd.colorscheme "lunaperche"
 vim.cmd [[ :set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P ]]
 vim.opt.winbar = "%n) %t"
 
