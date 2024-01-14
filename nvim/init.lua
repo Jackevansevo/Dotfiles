@@ -7,14 +7,15 @@ vim.g.loaded_python3_provider = 0
 
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
+vim.opt.background = 'light'
+vim.cmd 'colorscheme wildcharm'
+vim.cmd 'highlight WinSeparator guibg=None'
 
 vim.opt.laststatus = 3
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.wrap = false
 
-vim.opt.background = 'dark'
-vim.cmd.colorscheme "vividchalk"
 vim.cmd [[ :set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P ]]
 vim.opt.winbar = "%n) %t"
 
