@@ -61,6 +61,9 @@
 [submodule "nvim/pack/tpope/start/vim-vinegar"]
 	path = nvim/pack/tpope/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar
-[submodule "nvim/pack/tpope/start/vim-vividchalk"]
-	path = nvim/pack/tpope/start/vim-vividchalk
-	url = https://github.com/tpope/vim-vividchalk
+[submodule "nvim/pack/mhinz/start/vim-sayonara"]
+	path = nvim/pack/mhinz/start/vim-sayonara
+	url = https://github.com/mhinz/vim-sayonara
+[submodule "nvim/pack/ggandor/start/leap.nvim"]
+	path = nvim/pack/ggandor/start/leap.nvim
+	url = https://github.com/ggandor/leap.nvim

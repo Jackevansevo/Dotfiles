@@ -7,7 +7,7 @@ vim.g.loaded_python3_provider = 0
 
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
-vim.opt.background = 'light'
+vim.opt.background = 'dark'
 vim.cmd 'colorscheme wildcharm'
 vim.cmd 'highlight WinSeparator guibg=None'
 
@@ -24,10 +24,14 @@ vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
 vim.keymap.set("n", "L", "$", { noremap = true, silent = true })
 vim.keymap.set("n", "H", "^", { noremap = true, silent = true })
 vim.keymap.set("v", "L", "g_", { noremap = true, silent = true })
+vim.keymap.set("v", "gy", '"+y', { noremap = true, silent = true })
 
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 vim.cmd([[ command! -nargs=+ Grep execute 'silent grep! <args>' | copen ]])
+
+vim.cmd([[ command! BC :Sayonara! ]])
+vim.cmd([[ cnoreabbrev bc BC ]])
 
 vim.g.mapleader = " "
 
@@ -90,3 +94,5 @@ require'nvim-treesitter.configs'.setup {
 }
 
 vim.cmd([[ au TextYankPost * silent! lua vim.highlight.on_yank() ]])
+
+require('leap').create_default_mappings()
