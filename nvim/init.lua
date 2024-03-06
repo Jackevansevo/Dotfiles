@@ -1,49 +1,109 @@
+-- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
+local path_package = vim.fn.stdpath('data') .. '/site/'
+local mini_path = path_package .. 'pack/deps/start/mini.nvim'
+if not vim.loop.fs_stat(mini_path) then
+  vim.cmd('echo "Installing `mini.nvim`" | redraw')
+  local clone_cmd = {
+    'git', 'clone', '--filter=blob:none',
+    'https://github.com/echasnovski/mini.nvim', mini_path
+  }
+  vim.fn.system(clone_cmd)
+  vim.cmd('packadd mini.nvim | helptags ALL')
+end
+
+-- Set up 'mini.deps' (customize to your liking)
+require('mini.deps').setup({ path = { package = path_package } })
+local add = MiniDeps.add
+
+-- TODO awesome dude
+add({
+  source = 'nvim-treesitter/nvim-treesitter',
+  -- Use 'master' while monitoring updates in 'main'
+  checkout = 'master',
+  monitor = 'main',
+  -- Perform action after every checkout
+  hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
+})
+
+-- TODO: Fix this shit
+add('neovim/nvim-lspconfig')
+add('tartansandal/vim-compiler-pytest')
+add('tpope/vim-fugitive')
+add('tpope/vim-rhubarb')
+add('typicode/bg.nvim')
+add('github/copilot.vim')
+
+require('nvim-treesitter.configs').setup({
+  ensure_installed = { 'lua', 'vimdoc', 'python' },
+  highlight = { enable = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<A-o>",
+      node_incremental = "<A-o>",
+      node_decremental = "<A-i>",
+    },
+  },
+})
+
+
+vim.cmd.colorscheme('base16-solarized')
+vim.cmd [[ highlight WinSeparator guibg=None ]]
+
 vim.opt.exrc = true
+vim.opt.number = false
 
-vim.g.loaded_ruby_provider = 0
-vim.g.loaded_node_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_python3_provider = 0
+require('mini.ai').setup({})
+require('mini.basics').setup({})
+require('mini.bracketed').setup()
+require('mini.comment').setup()
+require('mini.completion').setup()
+require('mini.cursorword').setup()
+require('mini.jump').setup()
+require('mini.jump2d').setup()
+require('mini.move').setup()
+require('mini.operators').setup()
+require('mini.pairs').setup()
+require('mini.starter').setup()
+require('mini.statusline').setup({ use_icons = false })
+require('mini.surround').setup()
+require('mini.tabline').setup()
+require('mini.trailspace').setup()
 
-vim.opt.cursorline = true
-vim.opt.termguicolors = true
-vim.opt.background = 'dark'
-vim.cmd 'colorscheme wildcharm'
-vim.cmd 'highlight WinSeparator guibg=None'
+require('mini.hipatterns').setup({
+  highlighters = {
+    fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
+    hack  = { pattern = 'HACK',  group = 'MiniHipatternsHack'  },
+    todo  = { pattern = 'TODO',  group = 'MiniHipatternsTodo'  },
+    note  = { pattern = 'NOTE',  group = 'MiniHipatternsNote'  },
+  }
+})
 
-vim.opt.laststatus = 3
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-vim.opt.wrap = false
+local pick = require('mini.pick')
+pick.setup({ source = { show = pick.default_show } })
 
-vim.cmd [[ :set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P ]]
-vim.opt.winbar = "%n) %t"
+local files = require('mini.files')
+files.setup({ content = { prefix = function() end } })
 
-vim.cmd ([[ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case ]])
+vim.keymap.set("n", "-", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end)
+
+vim.keymap.set("n", "<leader>f",  pick.builtin.files, { noremap = true })
+vim.keymap.set("n", "<leader>b",  pick.builtin.buffers, { noremap = true })
+vim.keymap.set("n", "<leader>/",  pick.builtin.grep, { noremap = true })
+vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
+
 
 vim.keymap.set("n", "L", "$", { noremap = true, silent = true })
 vim.keymap.set("n", "H", "^", { noremap = true, silent = true })
 vim.keymap.set("v", "L", "g_", { noremap = true, silent = true })
 vim.keymap.set("v", "gy", '"+y', { noremap = true, silent = true })
 
-vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
+local bufremove = require('mini.bufremove')
+bufremove.setup()
 
-vim.cmd([[ command! -nargs=+ Grep execute 'silent grep! <args>' | copen ]])
-
-vim.cmd([[ command! BC :Sayonara! ]])
-vim.cmd([[ cnoreabbrev bc BC ]])
-
-vim.g.mapleader = " "
-
-vim.keymap.set("n", "<leader>f",  ":find ", { noremap = true })
-vim.keymap.set("n", "<leader>/",  ":Grep ", { noremap = true })
-
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+-- bc 'buffer close' variant of :bd deletes the buffer without closing the window
+vim.api.nvim_create_user_command('BC', function() bufremove.delete(0, true) end, {})
+vim.cmd('cnoreabbrev bc BC')
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -67,32 +127,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
   end,
 })
-
-
-require'nvim-treesitter.configs'.setup {
-  enable = true,
-
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = true,
-  },
-
-  ensure_installed = "python",
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<A-o>",
-      node_incremental = "<A-o>",
-      node_decremental = "<A-i>",
-    },
-  },
-}
-
-vim.cmd([[ au TextYankPost * silent! lua vim.highlight.on_yank() ]])
-
-require('leap').create_default_mappings()
