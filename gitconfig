@@ -17,5 +17,3 @@
 	defaultBranch = main
 [push]
 	autoSetupRemote = true
-[diff]
-	noprefix = true

@@ -15,7 +15,6 @@ end
 require('mini.deps').setup({ path = { package = path_package } })
 local add = MiniDeps.add
 
--- TODO awesome dude
 add({
   source = 'nvim-treesitter/nvim-treesitter',
   -- Use 'master' while monitoring updates in 'main'
@@ -25,13 +24,15 @@ add({
   hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
 })
 
--- TODO: Fix this shit
+add('lewis6991/gitsigns.nvim')
 add('neovim/nvim-lspconfig')
 add('tartansandal/vim-compiler-pytest')
 add('tpope/vim-fugitive')
 add('tpope/vim-rhubarb')
 add('typicode/bg.nvim')
 add('github/copilot.vim')
+
+require('gitsigns').setup()
 
 require('nvim-treesitter.configs').setup({
   ensure_installed = { 'lua', 'vimdoc', 'python' },
@@ -46,17 +47,20 @@ require('nvim-treesitter.configs').setup({
   },
 })
 
-
-vim.cmd.colorscheme('base16-solarized')
-vim.cmd [[ highlight WinSeparator guibg=None ]]
+vim.o.background = 'light'
+vim.cmd 'colorscheme base16-atelier-forest'
 
 vim.opt.exrc = true
 vim.opt.number = false
+vim.opt.cmdheight = 0
 
 require('mini.ai').setup({})
-require('mini.basics').setup({})
+require('mini.basics').setup({
+  options = {
+    extra_ui = true,
+  },
+})
 require('mini.bracketed').setup()
-require('mini.comment').setup()
 require('mini.completion').setup()
 require('mini.cursorword').setup()
 require('mini.jump').setup()
@@ -69,6 +73,8 @@ require('mini.statusline').setup({ use_icons = false })
 require('mini.surround').setup()
 require('mini.tabline').setup()
 require('mini.trailspace').setup()
+
+vim.cmd [[ highlight WinSeparator guibg=None ]]
 
 require('mini.hipatterns').setup({
   highlighters = {
