@@ -1,10 +1,11 @@
--- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
-local path_package = vim.fn.stdpath('data') .. '/site/'
-local mini_path = path_package .. 'pack/deps/start/mini.nvim'
+local path_package = vim.fn.stdpath('data') .. '/site'
+local mini_path = path_package .. '/pack/deps/start/mini.nvim'
 if not vim.loop.fs_stat(mini_path) then
   vim.cmd('echo "Installing `mini.nvim`" | redraw')
   local clone_cmd = {
     'git', 'clone', '--filter=blob:none',
+    -- Uncomment next line to use 'stable' branch
+    -- '--branch', 'stable',
     'https://github.com/echasnovski/mini.nvim', mini_path
   }
   vim.fn.system(clone_cmd)
@@ -23,16 +24,11 @@ add({
   -- Perform action after every checkout
   hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
 })
-
-add('lewis6991/gitsigns.nvim')
 add('neovim/nvim-lspconfig')
 add('tartansandal/vim-compiler-pytest')
 add('tpope/vim-fugitive')
 add('tpope/vim-rhubarb')
-add('typicode/bg.nvim')
 add('github/copilot.vim')
-
-require('gitsigns').setup()
 
 require('nvim-treesitter.configs').setup({
   ensure_installed = { 'lua', 'vimdoc', 'python' },
@@ -48,11 +44,9 @@ require('nvim-treesitter.configs').setup({
 })
 
 vim.o.background = 'light'
-vim.cmd 'colorscheme base16-atelier-forest'
+vim.cmd 'colorscheme base16-solarized'
 
 vim.opt.exrc = true
-vim.opt.number = false
-vim.opt.cmdheight = 0
 
 require('mini.ai').setup({})
 require('mini.basics').setup({
@@ -63,6 +57,7 @@ require('mini.basics').setup({
 require('mini.bracketed').setup()
 require('mini.completion').setup()
 require('mini.cursorword').setup()
+require('mini.diff').setup()
 require('mini.jump').setup()
 require('mini.jump2d').setup()
 require('mini.move').setup()
@@ -73,6 +68,8 @@ require('mini.statusline').setup({ use_icons = false })
 require('mini.surround').setup()
 require('mini.tabline').setup()
 require('mini.trailspace').setup()
+
+vim.opt.laststatus = 3
 
 vim.cmd [[ highlight WinSeparator guibg=None ]]
 
@@ -111,14 +108,9 @@ bufremove.setup()
 vim.api.nvim_create_user_command('BC', function() bufremove.delete(0, true) end, {})
 vim.cmd('cnoreabbrev bc BC')
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }
@@ -133,3 +125,27 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
   end,
 })
+
+vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]],   { expr = true })
+vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+
+vim.cmd([[
+function! s:Camelize(range) abort
+  if a:range == 0
+    s#\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)#\u\1\2#g
+  else
+    s#\%V\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)\%V#\u\1\2#g
+  endif
+endfunction
+
+function! s:Snakeize(range) abort
+  if a:range == 0
+    s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g
+  else
+    s#\%V\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)\%V#\l\1_\l\2#g
+  endif
+endfunction
+
+command! -range CamelCase silent! call <SID>Camelize(<range>)
+command! -range SnakeCase silent! call <SID>Snakeize(<range>)
+]])

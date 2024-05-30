@@ -17,3 +17,6 @@
 	defaultBranch = main
 [push]
 	autoSetupRemote = true
+
+[branch "main"]
+	pushRemote = no_push
