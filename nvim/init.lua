@@ -26,8 +26,6 @@ add({
 })
 add('neovim/nvim-lspconfig')
 add('tartansandal/vim-compiler-pytest')
-add('tpope/vim-fugitive')
-add('tpope/vim-rhubarb')
 add('github/copilot.vim')
 
 require('nvim-treesitter.configs').setup({
@@ -36,15 +34,13 @@ require('nvim-treesitter.configs').setup({
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "<A-o>",
-      node_incremental = "<A-o>",
-      node_decremental = "<A-i>",
+      init_selection = "[x",
+      node_incremental = "[x",
+      node_decremental = "]x",
     },
   },
 })
 
-vim.o.background = 'light'
-vim.cmd 'colorscheme base16-solarized'
 
 vim.opt.exrc = true
 
@@ -57,7 +53,6 @@ require('mini.basics').setup({
 require('mini.bracketed').setup()
 require('mini.completion').setup()
 require('mini.cursorword').setup()
-require('mini.diff').setup()
 require('mini.jump').setup()
 require('mini.jump2d').setup()
 require('mini.move').setup()
@@ -68,8 +63,26 @@ require('mini.statusline').setup({ use_icons = false })
 require('mini.surround').setup()
 require('mini.tabline').setup()
 require('mini.trailspace').setup()
+require('mini.git').setup()
+require('mini.diff').setup({
+  view = {
+    style = 'sign',
+    signs = { add = '+', change = '~', delete = '-' },
+  },
+})
 
-vim.opt.laststatus = 3
+
+local m = vim.fn.system("defaults read -g AppleInterfaceStyle")
+m = m:gsub("%s+", "") -- trim whitespace
+if m == "Dark" then
+  vim.o.background = "dark"
+  vim.cmd 'colorscheme base16-tomorrow-night'
+else
+  vim.o.background = "light"
+  vim.cmd 'colorscheme base16-tomorrow'
+end
+
+vim.o.number = false
 
 vim.cmd [[ highlight WinSeparator guibg=None ]]
 
@@ -128,24 +141,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]],   { expr = true })
 vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-
-vim.cmd([[
-function! s:Camelize(range) abort
-  if a:range == 0
-    s#\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)#\u\1\2#g
-  else
-    s#\%V\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)\%V#\u\1\2#g
-  endif
-endfunction
-
-function! s:Snakeize(range) abort
-  if a:range == 0
-    s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g
-  else
-    s#\%V\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)\%V#\l\1_\l\2#g
-  endif
-endfunction
-
-command! -range CamelCase silent! call <SID>Camelize(<range>)
-command! -range SnakeCase silent! call <SID>Snakeize(<range>)
-]])

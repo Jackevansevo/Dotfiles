@@ -11,6 +11,7 @@
         ci = commit
         st = status
 	recent = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
+	undo = reset --soft HEAD^
 [core]
 	excludesfile = /Users/jack/.gitignore
 [init]
