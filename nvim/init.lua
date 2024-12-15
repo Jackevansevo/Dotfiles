@@ -4,8 +4,6 @@ if not vim.loop.fs_stat(mini_path) then
   vim.cmd('echo "Installing `mini.nvim`" | redraw')
   local clone_cmd = {
     'git', 'clone', '--filter=blob:none',
-    -- Uncomment next line to use 'stable' branch
-    -- '--branch', 'stable',
     'https://github.com/echasnovski/mini.nvim', mini_path
   }
   vim.fn.system(clone_cmd)
@@ -25,8 +23,15 @@ add({
   hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
 })
 add('neovim/nvim-lspconfig')
+add('radenling/vim-dispatch-neovim')
 add('tartansandal/vim-compiler-pytest')
-add('github/copilot.vim')
+add('tpope/vim-dispatch')
+add('tpope/vim-fireplace')
+add('tpope/vim-fugitive')
+add('tpope/vim-rhubarb')
+add('catppuccin/nvim')
+add('lewis6991/gitsigns.nvim')
+add('janet-lang/janet.vim')
 
 require('nvim-treesitter.configs').setup({
   ensure_installed = { 'lua', 'vimdoc', 'python' },
@@ -34,57 +39,48 @@ require('nvim-treesitter.configs').setup({
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "[x",
-      node_incremental = "[x",
-      node_decremental = "]x",
+      init_selection = "<M-o>",
+      node_incremental = "<M-o>",
+      node_decremental = "<M-i>",
     },
   },
 })
 
-
 vim.opt.exrc = true
 
-require('mini.ai').setup({})
-require('mini.basics').setup({
-  options = {
-    extra_ui = true,
-  },
-})
+vim.cmd([[
+  let g:dispatch_no_job_make = 1
+  let g:dispatch_no_tmux_make = 1
+]])
+
+require('gitsigns').setup()
+
+require('mini.ai').setup()
+require('mini.basics').setup({options = {extra_ui = true}})
 require('mini.bracketed').setup()
 require('mini.completion').setup()
-require('mini.cursorword').setup()
+require('mini.icons').setup()
 require('mini.jump').setup()
 require('mini.jump2d').setup()
+require('mini.misc').setup()
 require('mini.move').setup()
 require('mini.operators').setup()
 require('mini.pairs').setup()
 require('mini.starter').setup()
-require('mini.statusline').setup({ use_icons = false })
+require('mini.statusline').setup()
 require('mini.surround').setup()
 require('mini.tabline').setup()
 require('mini.trailspace').setup()
-require('mini.git').setup()
-require('mini.diff').setup({
-  view = {
-    style = 'sign',
-    signs = { add = '+', change = '~', delete = '-' },
-  },
-})
 
+misc = require('mini.misc')
+misc.setup_restore_cursor()
+misc.setup_termbg_sync()
 
-local m = vim.fn.system("defaults read -g AppleInterfaceStyle")
-m = m:gsub("%s+", "") -- trim whitespace
-if m == "Dark" then
-  vim.o.background = "dark"
-  vim.cmd 'colorscheme base16-tomorrow-night'
-else
-  vim.o.background = "light"
-  vim.cmd 'colorscheme base16-tomorrow'
-end
+vim.o.background = 'dark'
+vim.cmd("colorscheme default")
 
-vim.o.number = false
-
-vim.cmd [[ highlight WinSeparator guibg=None ]]
+-- vim.o.number = false
+vim.o.laststatus = 3
 
 require('mini.hipatterns').setup({
   highlighters = {
@@ -96,10 +92,10 @@ require('mini.hipatterns').setup({
 })
 
 local pick = require('mini.pick')
-pick.setup({ source = { show = pick.default_show } })
+pick.setup()
 
 local files = require('mini.files')
-files.setup({ content = { prefix = function() end } })
+files.setup()
 
 vim.keymap.set("n", "-", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end)
 
@@ -141,3 +137,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]],   { expr = true })
 vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+
+local lspconfig = require('lspconfig')
+lspconfig.jedi_language_server.setup{ init_options = { diagnostics =  { enabled = false }, completion = { disableSnippets = true }}}
+lspconfig.ruff.setup{}
+
+vim.api.nvim_create_autocmd('FileType', {
+  -- This handler will fire when the buffer's 'filetype' is "python"
+  pattern = 'python',
+  callback = function(args)
+    vim.lsp.start({
+      cmd = { "mypy-lsp-wrapper" },
+      root_dir = vim.fn.getcwd(),
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.py",
+  callback = function()
+    vim.lsp.buf.code_action({
+      context = {
+        only = {
+          "source.fixAll.ruff"
+        },
+      },
+      apply = true,
+    })
+    vim.lsp.buf.format({ async = false })
+  end,
+})
