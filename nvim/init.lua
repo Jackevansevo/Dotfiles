@@ -76,8 +76,9 @@ misc = require('mini.misc')
 misc.setup_restore_cursor()
 misc.setup_termbg_sync()
 
-vim.o.background = 'dark'
-vim.cmd("colorscheme default")
+require("catppuccin").setup({ no_italic = true })
+
+vim.cmd.colorscheme "catppuccin"
 
 -- vim.o.number = false
 vim.o.laststatus = 3
@@ -142,16 +143,16 @@ local lspconfig = require('lspconfig')
 lspconfig.jedi_language_server.setup{ init_options = { diagnostics =  { enabled = false }, completion = { disableSnippets = true }}}
 lspconfig.ruff.setup{}
 
-vim.api.nvim_create_autocmd('FileType', {
-  -- This handler will fire when the buffer's 'filetype' is "python"
-  pattern = 'python',
-  callback = function(args)
-    vim.lsp.start({
-      cmd = { "mypy-lsp-wrapper" },
-      root_dir = vim.fn.getcwd(),
-    })
-  end,
-})
+-- vim.api.nvim_create_autocmd('FileType', {
+--   -- This handler will fire when the buffer's 'filetype' is "python"
+--   pattern = 'python',
+--   callback = function(args)
+--     vim.lsp.start({
+--       cmd = { "mypy-lsp-wrapper" },
+--       root_dir = vim.fn.getcwd(),
+--     })
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.py",
